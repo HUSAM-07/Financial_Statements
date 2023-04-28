@@ -1,0 +1,198 @@
+Statement,Variable,Meaning
+Balance Sheet,AccountsPayable,Amounts that a company owes to suppliers or vendors for goods and services received but not yet paid for
+Balance Sheet,AccountsReceivable,Amounts that a company is owed by its customers for goods or services that have been sold but not yet paid for
+Balance Sheet,AccumulatedDepreciation,The total amount of depreciation that has been charged to a company's assets over their useful life
+Balance Sheet,AdditionalPaidInCapital,The amount of capital that has been invested by shareholders in excess of the par value of the company's shares
+Balance Sheet,AllowanceForDoubtfulAccountsReceivable,An estimated amount of potential bad debts that a company expects will not be collected from its customers
+Balance Sheet,CapitalLeaseObligations,Lease obligations that are considered to be similar to debt because the lessee has assumed the risks and rewards of ownership of the leased asset
+Balance Sheet,CapitalStock,The total amount of shares that a company is authorized to issue
+Balance Sheet,CashAndCashEquivalents,"The total amount of cash held by a company, including cash on hand and in bank accounts, as well as highly liquid investments that can be quickly converted into cash"
+Balance Sheet,CashCashEquivalentsAndShortTermInvestments,"The total amount of cash, cash equivalents and highly liquid investments that can be easily converted into cash held by a company"
+Balance Sheet,CashFinancial,Cash and cash equivalents that are held for the purpose of meeting short-term financial obligations
+Balance Sheet,CommonStock,Shares of a company that represent ownership in the company and carry voting rights
+Balance Sheet,CommonStockEquity,The total amount of equity that is represented by the common stock of a company
+Balance Sheet,CurrentAccruedExpenses,Expenses that have been incurred but have not yet been paid
+Balance Sheet,CurrentAssets,Assets that are expected to be converted into cash within one year
+Balance Sheet,CurrentCapitalLeaseObligation,The portion of capital lease obligations that is due within the next 12 months
+Balance Sheet,CurrentDebt,Debt that is due within the next 12 months
+Balance Sheet,CurrentDebtAndCapitalLeaseObligation,The total amount of debt and capital lease obligations that is due within the next 12 months
+Balance Sheet,CurrentDeferredLiabilities,Liabilities that have been recognized but will not be paid until a future period
+Balance Sheet,CurrentDeferredRevenue,Revenue that has been recognized but will not be earned until a future period
+Balance Sheet,CurrentLiabilities,Liabilities that are due within one year
+Balance Sheet,CurrentNotesPayable,Short-term notes that are due within the next 12 months
+Balance Sheet,CurrentProvisions,Amounts that a company has set aside to cover expected future expenses or losses
+Balance Sheet,DerivativeProductLiabilities,Liabilities that arise from the use of derivative financial instruments
+Balance Sheet,FinancialAssets,"Assets that have a financial value and can be traded, such as stocks, bonds, and options"
+Balance Sheet,FinishedGoods,Products that have been completed and are ready to be sold
+Balance Sheet,GainsLossesNotAffectingRetainedEarnings,"Gains or losses that are not included in the calculation of retained earnings, such as gains or losses on the sale of investments"
+Balance Sheet,Goodwill,The excess of the purchase price of an acquired company over the fair value of its net assets
+Balance Sheet,GoodwillAndOtherIntangibleAssets,The total amount of goodwill and other intangible assets held by a company
+Balance Sheet,GrossAccountsReceivable,The total amount of accounts receivable before any allowances for doubtful accounts have been made
+Balance Sheet,GrossPPE,"The total cost of a company's property, plant, and equipment before any accumulated depreciation has been deducted"
+Balance Sheet,HedgingAssetsCurrent,Assets that are used to hedge against potential losses from changes in market conditions
+Balance Sheet,IncomeTaxPayable,The amount of income tax that a company owes to the government
+Balance Sheet,InterestPayable,The amount of interest that a company owes to its lenders
+Balance Sheet,Inventory,Goods that a company holds for sale to customers
+Balance Sheet,InvestedCapital,"Total amount of capital that has been invested in a company's operations, including equity and debt"
+Balance Sheet,InvestmentProperties,"Properties that a company holds for long-term rental income or for capital appreciation, rather than for use in its own operations"
+Balance Sheet,LineOfCredit,"Type of credit facility that allows a borrower to draw funds up to a certain limit as needed, and to repay the borrowed amount at any time. Interest is only paid on the amount borrowed"
+Balance Sheet,LongTermCapitalLeaseObligation,The portion of a long-term lease obligation that is considered a capital lease. Capital leases are those that transfer ownership of the leased asset to the lessee at the end of the lease term
+Balance Sheet,LongTermDebt,This is debt that has a maturity of more than one year
+Balance Sheet,LongTermDebtAndCapitalLeaseObligation,Sum of a company's long-term debt and its long-term capital lease obligations
+Balance Sheet,LongTermProvisions,Liabilities that are expected to be paid over a period of more than one year
+Balance Sheet,MachineryFurnitureEquipment,"The fixed assets of a company that are used in its operations, such as machinery, furniture, and equipment"
+Balance Sheet,NetDebt,Difference between a company's total debt and its cash and cash equivalents
+Balance Sheet,NetPPE,"Net book value of a company's property, plant, and equipment (ppe) after deducting accumulated depreciation"
+Balance Sheet,NetTangibleAssets,"Net book value of a company's tangible assets (assets that have a physical form and can be touched), after deducting accumulated depreciation"
+Balance Sheet,NonCurrentAccountsReceivable,Amounts due to a company that are expected to be received more than one year from the balance sheet date
+Balance Sheet,NonCurrentDeferredAssets,Assets that will be used or consumed after more than one year from the balance sheet date
+Balance Sheet,NonCurrentDeferredLiabilities,Liabilities that will not be paid until more than one year from the balance sheet date
+Balance Sheet,NonCurrentDeferredRevenue,Revenue that has been received in advance but will not be recognized as revenue until more than one year from the balance sheet date
+Balance Sheet,NonCurrentDeferredTaxesAssets,The tax assets that will not be realized until more than one year from the balance sheet date
+Balance Sheet,NonCurrentDeferredTaxesLiabilities,The tax liabilities that will not be paid until more than one year from the balance sheet date
+Balance Sheet,OrdinarySharesNumber,The number of ordinary shares (also known as common shares) that a company has outstanding
+Balance Sheet,OtherCurrentBorrowings,Short-term borrowings that are not classified as accounts payable or as part of a long-term debt
+Balance Sheet,OtherCurrentLiabilities,Current liabilities that are not classified as accounts payable or as short-term borrowings
+Balance Sheet,OtherEquityAdjustments,"Other equity adjustments refer to changes in a company's equity that are not due to transactions with shareholders or dividends. These adjustments can result from changes in accounting standards, foreign currency translation adjustments, or other factors that impact a company's equity"
+Balance Sheet,OtherIntangibleAssets,"Other intangible assets include any non-physical assets that lack a physical form but still hold value, such as patents, trademarks, copyrights, and goodwill"
+Balance Sheet,OtherPayable,Other payable is a liability account that includes debts that do not fall under a company's other payable accounts. This account can include items such as deferred payments or payments for non-operating expenses
+Balance Sheet,OtherProperties,"Other properties refer to any property, plant, or equipment (pp&e) that does not fall under a specific category. This could include buildings or equipment that are unique to the company's operations"
+Balance Sheet,OtherReceivables,Other receivables are a current asset account that includes money owed to the company that does not fall under the company's accounts receivable account. This could include loans made to employees or deposits paid for future services
+Balance Sheet,Payables,Amounts owed by a company to suppliers for goods or services purchased on credit
+Balance Sheet,PayablesAndAccruedExpenses,Payables and accrued expenses refer to the total amount of outstanding expenses that a company has incurred but has not yet paid. This account includes both current liabilities and expenses that are not yet due
+Balance Sheet,PensionandOtherPostRetirementBenefitPlansCurrent,Pension and other post-retirement benefit plans current refers to the portion of a company's long-term employee benefit plans that are due within the next year
+Balance Sheet,PrepaidAssets,Prepaid assets are current assets that represent payments made by a company for goods or services that have not yet been received. These assets are usually expensed over time as the goods or services are consumed
+Balance Sheet,Properties,"Properties refer to any physical assets that a company owns, including land, buildings, and equipment"
+Balance Sheet,Receivables,Receivables are current assets that represent money owed to a company by its customers for goods or services provided
+Balance Sheet,RetainedEarnings,Retained earnings are the portion of a company's profits that are reinvested back into the business rather than paid out as dividends to shareholders
+Balance Sheet,ShareIssued,Share issued refers to the total number of shares of a company's stock that have been issued and are outstanding
+Balance Sheet,StockholdersEquity,"Stockholders equity, also known as shareholder's equity, is the residual value of a company's assets after liabilities have been deducted. It represents the amount of equity that shareholders hold in the company"
+Balance Sheet,TangibleBookValue,"Tangible book value is a measure of a company's net worth that excludes intangible assets, such as goodwill or patents. It is calculated by subtracting a company's liabilities and intangible assets from its tangible assets"
+Balance Sheet,TaxesReceivable,Taxes receivable are current assets that represent taxes owed to a company by a taxing authority that have not yet been paid
+Balance Sheet,TotalAssets,Total assets are the sum of a company's current and non-current assets
+Balance Sheet,TotalCapitalization,Total capitalization represents the total amount of debt and equity financing that a company has used to fund its operations
+Balance Sheet,TotalDebt,Total debt is the sum of a company's current and long-term debt
+Balance Sheet,TotalEquityGrossMinorityInterest,"Total equity gross minority interest represents the total value of a company's equity, including the value of any minority interests"
+Balance Sheet,TotalLiabilitiesNetMinorityInterest,"Total liabilities of a company, including any liabilities related to minority interests in subsidiaries"
+Balance Sheet,TotalNonCurrentAssets,Total value of a company's non-current (long-term) assets
+Balance Sheet,TotalNonCurrentLiabilitiesNetMinorityInterest,"Total value of a company's non-current (long-term) liabilities, including any liabilities related to minority interests in subsidiaries"
+Balance Sheet,TotalTaxPayable,The amount of taxes that a company owes to tax authorities
+Balance Sheet,TradeandOtherPayablesNonCurrent,"Amounts that a company owes to suppliers and other parties, which are not due for payment within one year"
+Balance Sheet,TreasurySharesNumber,The number of a company's own shares that it has repurchased and is holding in treasury
+Balance Sheet,TreasuryStock,Shares of a company's own stock that it has repurchased and held in its treasury for future use
+Balance Sheet,WorkingCapital,"The difference between a company's current assets and its current liabilities, representing the amount of capital available for day-to-day operations"
+Cashflow Statement,AmortizationCashFlow,The amount of cash outflow due to amortization of intangible assets
+Cashflow Statement,AmortizationOfIntangibles,The process of spreading out the cost of an intangible asset over its useful life in a systematic and rational manner
+Cashflow Statement,AssetImpairmentCharge,A non-cash expense that reflects the reduction in the value of an asset due to an impairment loss
+Cashflow Statement,BeginningCashPosition,The amount of cash a company has at the beginning of a period
+Cashflow Statement,CapitalExpenditure,"The money a company spends to acquire, upgrade, or maintain long-term assets such as property, plant, and equipment"
+Cashflow Statement,CashDividendsPaid,The total amount of cash paid by a company to its shareholders as dividends
+Cashflow Statement,CashFlowFromContinuingFinancingActivities,The net amount of cash inflows and outflows from financing activities that are expected to continue in the future
+Cashflow Statement,CashFlowFromContinuingInvestingActivities,The net amount of cash inflows and outflows from investing activities that are expected to continue in the future
+Cashflow Statement,CashFlowFromContinuingOperatingActivities,The net amount of cash inflows and outflows from operating activities that are expected to continue in the future
+Cashflow Statement,ChangeInCashSupplementalAsReported,The net increase or decrease in cash and cash equivalents for a given period
+Cashflow Statement,ChangeInInventory,The change in the value of a company's inventory during a period
+Cashflow Statement,ChangeInOtherWorkingCapital,The net change in other current assets and liabilities during a period
+Cashflow Statement,ChangeInPayable,The change in the value of a company's payables during a period
+Cashflow Statement,ChangeInPayablesAndAccruedExpense,The change in the value of a company's payables and accrued expenses during a period
+Cashflow Statement,ChangeInPrepaidAssets,The change in the value of a company's prepaid assets during a period
+Cashflow Statement,ChangeInReceivables,The change in the value of a company's accounts receivable during a period
+Cashflow Statement,ChangeInWorkingCapital,The net change in a company's current assets and liabilities during a period
+Cashflow Statement,ChangesInAccountReceivables,The net change in a company's accounts receivable during a period
+Cashflow Statement,ChangesInCash,The net change in a company's cash and cash equivalents during a period
+Cashflow Statement,CommonStockDividendPaid,The amount of dividends paid on common stock during a period
+Cashflow Statement,CommonStockPayments,The amount of payments made for the issuance of common stock during a period
+Cashflow Statement,Depreciation,The amount of a company's long-term assets that have been used up or consumed during a period
+Cashflow Statement,DepreciationAmortizationDepletion,"The total amount of depreciation, amortization, and depletion expenses incurred by a company during a period"
+Cashflow Statement,DepreciationAndAmortization,The total amount of depreciation and amortization expenses incurred by a company during a period
+Cashflow Statement,EffectOfExchangeRateChanges,The impact of changes in exchange rates on a company's financial statements during a period
+Cashflow Statement,EndCashPosition,The amount of cash a company has at the end of a period
+Cashflow Statement,FinancingCashFlow,The net amount of cash inflows and outflows from financing activities during a period
+Cashflow Statement,FreeCashFlow,The amount of cash generated by a company after deducting capital expenditures
+Cashflow Statement,GainLossOnInvestmentSecurities,The gain or loss on the sale or disposition of investment securities during a period
+Cashflow Statement,GainLossOnSaleOfPPE,"The gain or loss on the sale of property, plant, and equipment during a period"
+Cashflow Statement,InterestPaidCFO,The amount of interest paid by a company on its debt during a period
+Cashflow Statement,InterestReceivedCFO,The amount of interest received by a company during a specific period that is included in its operating cash flow
+Cashflow Statement,InvestingCashFlow,"The cash inflows and outflows resulting from the acquisition or disposal of long-term assets, such as property, plant and equipment, investment properties, and intangible assets. It is one of the three sections of the cash flow statement"
+Cashflow Statement,IssuanceOfDebt,"The proceeds from the sale of new debt securities, such as bonds or notes, by a company"
+Cashflow Statement,LongTermDebtIssuance,The amount of long-term debt issued by a company during a specific period
+Cashflow Statement,LongTermDebtPayments,The amount of long-term debt principal and interest paid by a company during a specific period
+Cashflow Statement,NetCommonStockIssuance,The difference between the amount of common stock issued and the amount of common stock repurchased by a company during a specific period
+Cashflow Statement,NetForeignCurrencyExchangeGainLoss,The net gain or loss resulting from the translation of foreign currency denominated accounts of a company
+Cashflow Statement,NetIncome,"The total income earned by a company during a specific period, calculated by subtracting total expenses from total revenues"
+Cashflow Statement,NetIncomeFromContinuingOperations,"The portion of a company's net income that is generated from its ongoing business activities, after subtracting any income or losses from discontinued operations or extraordinary items"
+Cashflow Statement,NetIntangiblesPurchaseAndSale,The net amount of intangible assets acquired or disposed of by a company during a specific period
+Cashflow Statement,NetInvestmentPropertiesPurchaseAndSale,The net amount of investment properties acquired or disposed of by a company during a specific period
+Cashflow Statement,NetInvestmentPurchaseAndSale,"The net amount of investments in securities, such as stocks or bonds, acquired or disposed of by a company during a specific period"
+Cashflow Statement,NetIssuancePaymentsOfDebt,The net amount of long-term debt issued or repaid by a company during a specific period
+Cashflow Statement,NetLongTermDebtIssuance,The net amount of long-term debt issued by a company during a specific period
+Cashflow Statement,NetPPEPurchaseAndSale,"The net amount of property, plant, and equipment acquired or disposed of by a company during a specific period"
+Cashflow Statement,OperatingCashFlow,"The cash generated from a company's operating activities, such as sales of goods and services, and is calculated by subtracting operating expenses from operating revenues"
+Cashflow Statement,OperatingGainsLosses,"The gains or losses resulting from a company's ordinary course of business operations, such as the sale of inventory or the disposal of equipment"
+Cashflow Statement,OtherNonCashItems,"The non-cash transactions that do not affect a company's cash position, such as the depreciation of assets, the amortization of intangibles, or the provision for bad debt"
+Cashflow Statement,ProvisionandWriteOffofAssets,"The amount of expense recorded by a company for the depreciation of assets, amortization of intangible assets, or the write-off of bad debt"
+Cashflow Statement,PurchaseOfIntangibles,"The amount of money spent by a company to acquire intangible assets, such as patents, trademarks, or copyrights"
+Cashflow Statement,PurchaseOfInvestment,"The amount of money spent by a company to acquire investments in securities, such as stocks or bonds"
+Cashflow Statement,PurchaseOfInvestmentProperties,"The amount of money spent by a company to acquire investment properties, such as real estate"
+Cashflow Statement,PurchaseOfPPE,"The amount of money spent by a company to acquire property, plant, and equipment"
+Cashflow Statement,RepaymentOfDebt,The amount of long-term debt principal and interest repaid by a company during a specific period
+Cashflow Statement,RepurchaseOfCapitalStock,The amount of money spent by a company to buy back its own shares
+Cashflow Statement,SaleOfIntangibles,"Revenue generated from the sale of intangible assets, such as patents, copyrights, and trademarks"
+Cashflow Statement,SaleOfPPE,"Revenue generated from the sale of property, plant, and equipment"
+Cashflow Statement,StockBasedCompensation,A method of compensating employees and executives by granting them stock options or shares in the company
+Cashflow Statement,TaxesRefundPaid,Refunds of taxes previously paid by a company to the government
+Income Statement,Amortization,The process of spreading the cost of an intangible asset over its useful life
+Income Statement,AmortizationOfIntangiblesIncomeStatement,The portion of the cost of an intangible asset that is expensed on the income statement over its useful life
+Income Statement,BasicAverageShares,"The weighted average number of shares outstanding during a specific period, used to calculate earnings per share"
+Income Statement,BasicEPS,Earnings per share calculated by dividing a company's net income by its weighted average number of shares outstanding during a specific period
+Income Statement,DepreciationAmortizationDepletionIncomeStatement,"The total amount of depreciation, amortization, and depletion expenses charged against a company's revenues on the income statement"
+Income Statement,DepreciationAndAmortizationInIncomeStatement,The total amount of depreciation and amortization expenses charged against a company's revenues on the income statement
+Income Statement,DepreciationIncomeStatement,The portion of the cost of a tangible asset that is expensed on the income statement over its useful life
+Income Statement,DilutedAverageShares,"The weighted average number of shares outstanding during a specific period, adjusted for the potential impact of dilutive securities such as stock options and convertible bonds"
+Income Statement,DilutedEPS,Earnings per share calculated by dividing a company's net income by its diluted average shares outstanding during a specific period
+Income Statement,DilutedNIAvailtoComStockholders,"Net income available to common stockholders, adjusted for the potential impact of dilutive securities"
+Income Statement,EBIT,"Earnings before interest and taxes, representing a company's operating profit"
+Income Statement,EBITDA,"Earnings before interest, taxes, depreciation, and amortization, representing a company's operating cash flow"
+Income Statement,GainOnSaleOfPPE,"The profit earned by a company from the sale of property, plant, and equipment"
+Income Statement,GainOnSaleOfSecurity,The profit earned by a company from the sale of securities
+Income Statement,GeneralAndAdministrativeExpense,"A category of expenses incurred by a company that are not directly related to the production or sale of its goods or services, including salaries, rent, and office supplies"
+Income Statement,ImpairmentOfCapitalAssets,"A reduction in the value of a long-term asset due to damage, obsolescence, or other factors"
+Income Statement,InterestExpense,"The cost of borrowing money, including interest payments on loans and bonds"
+Income Statement,InterestExpenseNonOperating,"Interest expense that is not directly related to a company's operations, such as interest paid on debt used to finance acquisitions"
+Income Statement,InterestIncome,"Revenue generated from interest-bearing assets such as bonds, loans, and savings accounts"
+Income Statement,InterestIncomeNonOperating,"Interest income that is not directly related to a company's operations, such as interest earned on investments in other companies"
+Income Statement,NetIncome,"The total income earned by a company during a specific period, calculated by subtracting total expenses from total revenues"
+Income Statement,NetIncomeCommonStockholders,A company's net income after deducting any dividends paid to preferred stockholders
+Income Statement,NetIncomeContinuousOperations,"A company's net income from its ongoing business activities, excluding any income or losses from discontinued operations"
+Income Statement,NetIncomeFromContinuingAndDiscontinuedOperation,A company's net income from both its ongoing business activities and any income or losses from discontinued operations
+Income Statement,NetIncomeFromContinuingOperationNetMinorityInterest,"Portion of a company's net income that is attributed to the minority shareholders. It represents the income earned by the company's operations after deducting interest, taxes, and other expenses, and is calculated by subtracting the minority interest expense from the net income of continuing operations"
+Income Statement,NetIncomeIncludingNoncontrollingInterests,Net income of a company that includes both the portion attributable to the company's common shareholders and the portion attributable to the minority shareholders
+Income Statement,NetInterestIncome,"Net interest income is the difference between the interest earned on assets, such as loans and investments, and the interest paid on liabilities, such as deposits and other borrowings. It is a measure of the profitability of a financial institution"
+Income Statement,NetNonOperatingInterestIncomeExpense,"Net non-operating interest income/expense is the difference between interest income and interest expense from non-operating activities, such as investments in other companies, real estate, or other non-operating assets or liabilities"
+Income Statement,NormalizedEBITDA,"Normalized ebitda (earnings before interest, taxes, depreciation, and amortization) is a measure of a company's financial performance that excludes unusual or one-time expenses, such as restructuring costs or gains or losses from asset sales, to provide a more accurate picture of the company's ongoing operating performance"
+Income Statement,NormalizedIncome,Normalized income is a company's earnings that have been adjusted to exclude unusual or one-time items that are not expected to recur in future periods. This measure provides a clearer view of the company's underlying profitability and performance
+Income Statement,OperatingExpense,"Operating expenses are the costs incurred by a company to carry out its normal business operations, such as salaries and wages, rent, utilities, and other general and administrative expenses"
+Income Statement,OperatingIncome,"Operating income, also known as operating profit, is a company's earnings before interest and taxes (ebit). It represents the profit generated by a company's core business operations, excluding non-operating income and expenses"
+Income Statement,OperatingRevenue,"Operating revenue, also known as net sales or revenue from operations, is the amount of money a company generates from its normal business activities, excluding any non-operating income"
+Income Statement,OtherGandA,"Other g&a (general and administrative) expenses are expenses incurred by a company that are not directly related to its core business operations, such as legal and accounting fees, advertising, and office expenses"
+Income Statement,OtherIncomeExpense,"Other income and expense are gains or losses that are not directly related to a company's normal business operations. Examples include gains or losses from the sale of assets or investments, foreign exchange gains or losses, and interest income or expense from non-operating activities"
+Income Statement,OtherOperatingExpenses,"Other operating expenses are expenses incurred by a company that are not directly related to its core business operations, such as research and development, advertising, and marketing expenses"
+Income Statement,OtherSpecialCharges,"Other special charges are unusual or one-time expenses that a company incurs, such as restructuring costs, asset write-downs, or legal settlements"
+Income Statement,PretaxIncome,Pretax income is a company's earnings before taxes are deducted. It is a measure of a company's profitability that excludes the impact of taxes
+Income Statement,EBT,Pretax income is a company's earnings before taxes are deducted. It is a measure of a company's profitability that excludes the impact of taxes
+Income Statement,ReconciledDepreciation,"Reconciled depreciation is the amount of depreciation expense that has been recognized on a company's financial statements, adjusted for any differences between the company's tax basis and book basis of its assets"
+Income Statement,RentAndLandingFees,"Rent and landing fees are expenses incurred by companies in the airline industry, specifically related to the leasing of planes and payment for airport landing fees"
+Income Statement,RentExpenseSupplemental,"Rent expense supplemental is additional information provided on a company's financial statements regarding its rental expenses, such as the amounts of rent paid for specific properties"
+Income Statement,SalariesAndWages,"Salaries and wages are expenses incurred by a company for employee compensation, including wages, salaries, bonuses, and benefits"
+Income Statement,SellingGeneralAndAdministration,"Selling, general, and administrative (sg&a) expenses are the costs incurred by a company to support its sales and marketing efforts, including salaries and wages, advertising, travel and entertainment expenses, and other general and administrative expenses"
+Income Statement,SpecialIncomeCharges,"Special income charges are unusual or one-time gains that a company realizes, such as gains from the sale of assets or investments or insurance recoveries"
+Income Statement,TaxEffectOfUnusualItems,"The amount of tax impact that is associated with any unusual item, including non-recurring and extraordinary items, that are included in the income statement"
+Income Statement,TaxProvision,The amount of income tax liability that a company expects to pay in a given period. The tax provision is calculated by applying the applicable tax rate to the company's taxable income for the period
+Income Statement,TaxRateForCalcs,The effective tax rate used to calculate the tax provision for a given period. This rate is based on the company's statutory tax rate and any tax credits or deductions that are applicable in the given period
+Income Statement,EffectiveTaxRate,The effective tax rate used to calculate the tax provision for a given period. This rate is based on the company's statutory tax rate and any tax credits or deductions that are applicable in the given period
+Income Statement,TotalExpenses,"The sum of all costs incurred by a company during a specific period, including cost of goods sold, operating expenses, interest expenses, and taxes"
+Income Statement,TotalOperatingIncomeAsReported,The total income generated by a company's operating activities before any deductions or adjustments are made
+Income Statement,TotalOtherFinanceCost,"The total cost of financing activities other than interest expenses, including fees for loan origination and servicing"
+Income Statement,TotalRevenue,The total amount of money generated by a company's sales and other activities during a specific period
+Income Statement,TotalUnusualItems,The sum of all extraordinary and non-recurring items that are included in a company's income statement
+Income Statement,TotalUnusualItemsExcludingGoodwill,"The sum of all extraordinary and non-recurring items that are included in a company's income statement, excluding any items related to goodwill impairment"
