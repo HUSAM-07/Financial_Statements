@@ -48,7 +48,9 @@ def add_percentage(x):
 	return x
 
 def remove_percentage_sign(x):
-	return x.replace("%", "")
+	if not np.isnan(x):
+		x = x.replace("%", "")
+	return x
 
 def prettify(option: str) -> str:
 	words = option.split("_")
