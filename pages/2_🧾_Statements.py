@@ -300,7 +300,7 @@ def main(tickers, symbol, strings: dict, online: bool):
 		"Return on Current Equity (After Tax)",
 		
 		"EBITDA Margin",
-		"EBIT Margin/OPM",
+		"EBIT Margin / OPM",
 		"EBT Margin",
 		"Net Profit Margin (NPM)",
 		"Asset Turnover Ratio (ATR)",
@@ -311,22 +311,22 @@ def main(tickers, symbol, strings: dict, online: bool):
 
 		"Current Asset Turnover Ratio",
 		"Non-Current Asset Turnover Ratio",
-		"PPE Utilisation Ratio/ Capital Intensity Ratio",
+		"PPE Utilisation Ratio / Capital Intensity Ratio",
 		"Equity Turnover Ratio",
 
 		"Working Capital Turnover Ratio",
 		"Inventory Turnover Ratio (ITR)",
 		"Days Inventory",
 		"Debtors Turnover Ratio (DTR)",
-		"Days Debtors/Receivables/Average Collection Period",
+		"Days Debtors/Receivables / Average Collection Period",
 		"Days Cash",
 		"Creditor Turnover Ratio (CTR)",
-		"Days Creditors/Payables/Average Payment Period",
+		"Days Creditors/Payables / Average Payment Period",
 		"Cash Conversion Cycle (Days)",
 
 		"Debt/Equity Ratio",
-		"Debt Ratio /Debt Capitalisation Ratio",
-		"Equity Ratio/ Equity Capitalisation Ratio",
+		"Debt Ratio / Debt Capitalisation Ratio",
+		"Equity Ratio / Equity Capitalisation Ratio",
 		"Interest Coverage Ratio",
 		"Total Debt Service Ratio",
 
@@ -337,7 +337,7 @@ def main(tickers, symbol, strings: dict, online: bool):
 		"Retension Ratio",
 
 		"Current Ratio",
-		"Quick Ratio/ Acid Test Ratio",
+		"Quick Ratio / Acid Test Ratio",
 
 		"Book Value per Share",
 		"Market Value Per Share (on balance sheet date)",
