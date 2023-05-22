@@ -18,9 +18,22 @@ import plotly.graph_objects as go
 import plotly.express as px
 from typing import Dict, List
 
+def show_change(first_value, last_value):
+	diff = float(remove_percentage_sign(last_value)) - float(remove_percentage_sign(first_value))
+
+	formatted_diff = format_num(diff)
+
+	if diff > 0:
+		formatted_diff = f"+{formatted_diff}"
+	if type(first_value) == str and type(last_value) == str:
+		if "%" in first_value or "%" in last_value:
+			formatted_diff = f"{formatted_diff}%"
+	
+	return formatted_diff
+
 def format_num(x):
 
-	# first try converting to string
+	# first try converting to float
 	if type(x) == str:
 		try:
 			x = float(x)
@@ -30,6 +43,8 @@ def format_num(x):
 	if type(x) in [int, float]:
 		if np.isnan(x):
 			x = None
+		elif abs(x)>=1_000_000_000_000:
+			x = f'{x/1_000_000_000_000:.1f}T'
 		elif abs(x)>=1_000_000_000:
 			x = f'{x/1_000_000_000:.1f}B'
 		elif abs(x)>=1_000_000:
@@ -41,14 +56,22 @@ def format_num(x):
 
 	return x
 
-def add_percentage(x):
+def convert_to_percentage(x):
+	# first try converting to float
+	if type(x) == str:
+		try:
+			x = float(x)
+		except:
+			pass
+
+
 	if not np.isnan(x):
 		x = f"{x*100:.1f}%"
 	
 	return x
 
 def remove_percentage_sign(x):
-	if not np.isnan(x):
+	if x is not None:
 		x = x.replace("%", "")
 	return x
 
@@ -132,30 +155,27 @@ def read_data(_ticker, symbol, online, *args):
 @st.cache_data
 def get_statements_data(_ticker, symbol, online, *args):
 	balance_sheet_df, cash_flow_df, income_statement_df = read_data(_ticker, symbol, online, *args)
-
 	balance_sheet_df = balance_sheet_df.drop(columns=["symbol", "periodType", "currencyCode"])
-	
 	balance_sheet_df = balance_sheet_df.rename(columns={
 		"StockholdersEquity": "TotalEquity"
 	})
-	
 	balance_sheet_df["TotalCurrentLiabilities"] = balance_sheet_df["CurrentLiabilities"] + balance_sheet_df["OtherCurrentLiabilities"]
 	balance_sheet_df["CurrentEquity"] = balance_sheet_df["CurrentLiabilities"] + balance_sheet_df["OtherCurrentLiabilities"]
-	
 	balance_sheet_df.loc["Statement"] = "Balance Sheet"
 
 	cash_flow_df = cash_flow_df.drop(columns=[
 		"NetIncome", "symbol", "periodType", "currencyCode"
 	])
+	cash_flow_df = cash_flow_df.rename(columns={
+		"ChangesInCash": "NetCashflow",
+	})
 	cash_flow_df.loc["Statement"] = "Cash Flow"
 
 	income_statement_df = income_statement_df.drop(columns=["symbol", "periodType", "currencyCode"])
-
 	income_statement_df = income_statement_df.rename(columns={
 		"PretaxIncome": "EBT",
 		"TaxRateForCalcs": "EffectiveTaxRate"
 	})
-
 	income_statement_df.loc["Statement"] = "Income Statement"
 	
 	df = (
@@ -238,7 +258,7 @@ def ratio_analysis(ratio_df, ratios, percentage_ratios):
 	ratio_df[ratios[41]] = ratio_df[ratios[39]]/ratio_df[ratios[38]]
 	
 	try:
-		ratio_df[percentage_ratios] = ratio_df[percentage_ratios].applymap(add_percentage)
+		ratio_df[percentage_ratios] = ratio_df[percentage_ratios].applymap(convert_to_percentage)
 	except:
 		pass
 
@@ -417,7 +437,7 @@ def main(tickers, symbol, strings: dict, online: bool):
 		col = horizontal_df.iloc[0]
 
 		filtered_df = filtered_df.merge(
-			horizontal_df.apply(horizontal_analysis, axis=1, args=[col]).applymap(add_percentage).add_suffix('Hor'),
+			horizontal_df.apply(horizontal_analysis, axis=1, args=[col]).applymap(convert_to_percentage).add_suffix('Hor'),
 			how="inner", left_index=True, right_index=True
 		)
 	
@@ -449,7 +469,7 @@ def main(tickers, symbol, strings: dict, online: bool):
 					.drop(columns="Statement")
 					.T
 					.apply(vertical_analysis, axis=0, args=[df["TotalAssets"]])
-					.applymap(add_percentage)
+					.applymap(convert_to_percentage)
 					.add_suffix('Ver')
 				),
 				how="inner", left_index=True, right_index=True
@@ -463,15 +483,27 @@ def main(tickers, symbol, strings: dict, online: bool):
 					.drop(columns="Statement")
 					.T
 					.apply(vertical_analysis, axis=0, args=[df["TotalRevenue"]])
-					.applymap(add_percentage)
+					.applymap(convert_to_percentage)
 					.add_suffix('Ver')
 				),
 				how="inner", left_index=True, right_index=True
 			)
 
 		if "Cash Flow" in st.session_state["selected_statements"]:
-			st.warning("Cashflow statement does not have vertical analysis", icon="⚠️")
-			return
+			st.warning("Using net cashflow as base (not taught in lecture)", icon="⚠️")
+			filtered_df = filtered_df.merge(
+				(
+					copy[
+						copy["Statement"] == "Cash Flow"
+					]
+					.drop(columns="Statement")
+					.T
+					.apply(vertical_analysis, axis=0, args=[ df["NetCashflow"] ])
+					.applymap(convert_to_percentage)
+					.add_suffix('Ver')
+				),
+				how="inner", left_index=True, right_index=True
+			)
 		
 	regular_attributes = list(df.columns.values)
 	
@@ -492,7 +524,7 @@ def main(tickers, symbol, strings: dict, online: bool):
 		st.session_state["selected_attributes"] = st.multiselect(
 			label = "Attributes",
 			#label_visibility = "collapsed",
-			options = sorted(attributes_options)
+			options = sorted(list(set(attributes_options)))
 		)
 
 	checkpoints = {
@@ -573,9 +605,10 @@ def main(tickers, symbol, strings: dict, online: bool):
 
 		filtered_df = filtered_df[st.session_state["selected_attributes_modified"]]
 
+		filtered_df = filtered_df.T.drop_duplicates().T
 		plot_data = filtered_df.copy().astype(str)
 		table_data = filtered_df.copy()
-		
+
 		if len(st.session_state["selected_attributes_modified"]) > 0:
 			fig = px.line(
 				plot_data,
@@ -623,6 +656,7 @@ def main(tickers, symbol, strings: dict, online: bool):
 					#itemdoubleclick = 'toggle'
 				)
 			)
+			# fig.update_yaxes(rangemode="tozero")
 
 			if st.session_state["simplify_graph"] == True:
 				annotations = []
@@ -642,7 +676,8 @@ def main(tickers, symbol, strings: dict, online: bool):
 					last_value = d.y[last_index]
 
 					first_text = '  ' + d.name + ' ' + format_num(first_value) + '  '
-					last_text = '  ' + format_num(last_value) + ' ' + f"({format_num(float(remove_percentage_sign(last_value)) - float(remove_percentage_sign(first_value)))})"  + '  '
+					last_text = '  ' + format_num(last_value) + ' ' + f"({show_change(first_value, last_value)})"  + '  '
+					
 
 					annotations.append(dict(
 						x = d.x[first_index],
