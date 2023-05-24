@@ -32,46 +32,50 @@ def show_change(first_value, last_value):
 	return formatted_diff
 
 def format_num(x):
+	if x:
+		# first try converting to float
+		if type(x) == str:
+			try:
+				x = float(x)
+			except:
+				pass
 
-	# first try converting to float
-	if type(x) == str:
-		try:
-			x = float(x)
-		except:
-			pass
-
-	if type(x) in [int, float]:
-		if np.isnan(x):
-			x = None
-		elif abs(x)>=1_000_000_000_000:
-			x = f'{x/1_000_000_000_000:.1f}T'
-		elif abs(x)>=1_000_000_000:
-			x = f'{x/1_000_000_000:.1f}B'
-		elif abs(x)>=1_000_000:
-			x = f'{x/1_000_000:.1f}M'
-		elif abs(x)>=1_000:
-			x = f'{x/1_000:.1f}K'
-		else:
-			x = f'{x:.1f}'
+		if type(x) in [int, float]:
+			if np.isnan(x):
+				x = None
+			elif abs(x)>=1_000_000_000_000:
+				x = f'{x/1_000_000_000_000:.1f}T'
+			elif abs(x)>=1_000_000_000:
+				x = f'{x/1_000_000_000:.1f}B'
+			elif abs(x)>=1_000_000:
+				x = f'{x/1_000_000:.1f}M'
+			elif abs(x)>=1_000:
+				x = f'{x/1_000:.1f}K'
+			else:
+				x = f'{x:.1f}'
 
 	return x
 
 def convert_to_percentage(x):
-	# first try converting to float
-	if type(x) == str:
-		try:
-			x = float(x)
-		except:
-			pass
+	if x:
+		# first try converting to float
+		if type(x) == str:
+			try:
+				x = float(x)
+			except:
+				pass 
 
+		if not np.isnan(x):
+			x = f"{x*100:.1f}%"
+	return x
 
-	if not np.isnan(x):
-		x = f"{x*100:.1f}%"
-	
+def add_percentage_sign(x):
+	if x:
+		x = str(x) + "%"
 	return x
 
 def remove_percentage_sign(x):
-	if x is not None:
+	if x and type(x) == str:
 		x = x.replace("%", "")
 	return x
 
@@ -81,7 +85,6 @@ def prettify(option: str) -> str:
 
 	return " ".join(words)
 
-@st.cache_data
 def zip_data(_ticker, symbol, online, *args):
 	balance_sheet_df, cash_flow_df, income_statement_df = read_data(_ticker, symbol, online, *args)
 	
@@ -92,11 +95,9 @@ def zip_data(_ticker, symbol, online, *args):
 		csv_zip.writestr(f"{symbol}_Income_Statement.csv", pd.DataFrame(income_statement_df.T).to_csv())
 	return buf.getvalue()
 
-@st.cache_data
 def convert_df_to_csv(df):
 	return df.to_csv()
 
-@st.cache_data
 def convert_dfs_to_excel(dfs: list, sheet_names: list):
 	buffer = BytesIO()
 	with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
@@ -104,11 +105,9 @@ def convert_dfs_to_excel(dfs: list, sheet_names: list):
 			df.T.to_excel(writer, sheet_name)
 	return buffer
 
-@st.cache_data
 def convert_df_to_html(df):
 	return df.to_html()
 
-@st.cache_data
 def convert_fig_for_download(fig, config):
 	buffer = StringIO()
 	fig.write_html(buffer, include_plotlyjs=True, config=config, full_html=False)
@@ -137,31 +136,43 @@ def read_data(_ticker, symbol, online, *args):
 					
 			col = statement_df.columns[0]
 			if "date" in col.lower():
-				statement_df = statement_df.rename(columns = {col: "date"}).reset_index().set_index("date")
+				statement_df = statement_df.rename(columns = {col: "Date"})
+				
 			
 			file = f"./data/{symbol}_{statement}.csv"
 			statement_df.to_csv(file, index=True)
 	
 	try:
-		balance_sheet_df = pd.read_csv(f"./data/{symbol}_balance_sheet.csv", index_col="date", parse_dates=True)
-		cash_flow_df = pd.read_csv(f"./data/{symbol}_cash_flow.csv", index_col="date", parse_dates=True)
-		income_statement_df = pd.read_csv(f"./data/{symbol}_income_statement.csv", index_col="date", parse_dates=True)
+		balance_sheet_df = pd.read_csv(f"./data/{symbol}_balance_sheet.csv", parse_dates=True)
+		cash_flow_df = pd.read_csv(f"./data/{symbol}_cash_flow.csv", parse_dates=True)
+		income_statement_df = pd.read_csv(f"./data/{symbol}_income_statement.csv", parse_dates=True)
 	except Exception:
 		display_backup_missing()
+		st.stop()
 		return None
 
 	return balance_sheet_df, cash_flow_df, income_statement_df
 
-@st.cache_data
 def get_statements_data(_ticker, symbol, online, *args):
 	balance_sheet_df, cash_flow_df, income_statement_df = read_data(_ticker, symbol, online, *args)
+	
 	balance_sheet_df = balance_sheet_df.drop(columns=["symbol", "periodType", "currencyCode"])
 	balance_sheet_df = balance_sheet_df.rename(columns={
 		"StockholdersEquity": "TotalEquity"
 	})
 	balance_sheet_df["TotalCurrentLiabilities"] = balance_sheet_df["CurrentLiabilities"] + balance_sheet_df["OtherCurrentLiabilities"]
 	balance_sheet_df["CurrentEquity"] = balance_sheet_df["CurrentLiabilities"] + balance_sheet_df["OtherCurrentLiabilities"]
-	balance_sheet_df.loc["Statement"] = "Balance Sheet"
+	
+	balance_sheet_df = pd.melt(
+		balance_sheet_df,
+		id_vars="Date",
+		# value_vars=None,
+		var_name="Variable",
+		value_name="Value",
+		# col_level=None,
+		# ignore_index=False
+	)
+	balance_sheet_df["Statement"] = "Balance Sheet"
 
 	cash_flow_df = cash_flow_df.drop(columns=[
 		"NetIncome", "symbol", "periodType", "currencyCode"
@@ -169,31 +180,70 @@ def get_statements_data(_ticker, symbol, online, *args):
 	cash_flow_df = cash_flow_df.rename(columns={
 		"ChangesInCash": "NetCashflow",
 	})
-	cash_flow_df.loc["Statement"] = "Cash Flow"
-
+	cash_flow_df = pd.melt(
+		cash_flow_df,
+		id_vars="Date",
+		# value_vars=None,
+		var_name="Variable",
+		value_name="Value",
+		# col_level=None,
+		# ignore_index=False
+	)
+	cash_flow_df["Statement"] = "Cash Flow"
+	
 	income_statement_df = income_statement_df.drop(columns=["symbol", "periodType", "currencyCode"])
 	income_statement_df = income_statement_df.rename(columns={
 		"PretaxIncome": "EBT",
 		"TaxRateForCalcs": "EffectiveTaxRate"
 	})
-	income_statement_df.loc["Statement"] = "Income Statement"
-	
-	df = (
-		balance_sheet_df
-		.merge(cash_flow_df, left_index=True, right_index=True)
-		.merge(income_statement_df, left_index=True, right_index=True)
-	)
-	
-	# df = df.fillna(0)
 
-	df = df.T
-	df.index.name = "Variable"
+	income_statement_df = pd.melt(
+		income_statement_df,
+		id_vars="Date",
+		# value_vars=None,
+		var_name="Variable",
+		value_name="Value",
+		# col_level=None,
+		# ignore_index=False
+	)
+	income_statement_df["Statement"] = "Income Statement"
 	
-	return df
+	df = pd.concat([balance_sheet_df, cash_flow_df, income_statement_df]).reset_index(drop=True)
+
+	mappings = df[["Variable", "Statement"]].drop_duplicates()
+	
+	return df, mappings
 
 @st.cache_data
-def ratio_analysis(ratio_df, ratios, percentage_ratios):
-	ratio_df = ratio_df.copy().T.drop("Statement")
+def get_data(_ticker, symbol, online, *args):
+	df, statement_mappings = get_statements_data(_ticker, symbol, online, *args)
+
+	absolute_df = df.pipe(absolute_analysis)
+	horizontal_df = df.pipe(horizontal_analysis, statement_mappings)
+	vertical_df = df.pipe(vertical_analysis, statement_mappings)
+	ratio_df = df.pipe(ratio_analysis, ratios, percentage_ratios, ratio_groups)
+	
+	df = (
+		pd.concat([absolute_df, horizontal_df, vertical_df, ratio_df])
+		.dropna(subset = ['Value'])
+		.reset_index(drop=True)
+	)
+
+	regular_variables = absolute_df["Variable"].unique()
+	ratio_variables = ratio_df["Variable"].unique()
+	return df, regular_variables, ratio_variables
+
+def absolute_analysis(df):
+	absolute_df = df.copy()
+	absolute_df["Value"] = absolute_df["Value"]
+	absolute_df["Analysis"] = "Absolute"
+	return absolute_df
+
+def ratio_analysis(df, ratios, percentage_ratios, ratio_groups):
+	ratio_df = df.copy()
+	ratio_df = ratio_df.pivot(index='Date', columns='Variable', values='Value')
+	initial_cols = ratio_df.columns
+	ratio_df = ratio_df.reset_index()
 	
 	ratio_df[ratios[0]] = (ratio_df["EBIT"]/ratio_df["TotalAssets"])
 	ratio_df[ratios[1]] = (
@@ -257,30 +307,197 @@ def ratio_analysis(ratio_df, ratios, percentage_ratios):
 	ratio_df[ratios[40]] = ratio_df[ratios[39]]/ratio_df[ratios[32]]
 	ratio_df[ratios[41]] = ratio_df[ratios[39]]/ratio_df[ratios[38]]
 	
-	try:
-		ratio_df[percentage_ratios] = ratio_df[percentage_ratios].applymap(convert_to_percentage)
-	except:
-		pass
+	ratio_df = ratio_df.drop(columns=initial_cols)
+	
+	ratio_df = pd.melt(
+		ratio_df,
+		id_vars="Date",
+		# value_vars=None,
+		var_name="Variable",
+		value_name="Value",
+		# col_level=None,
+		# ignore_index=False
+	)
+
+	ratio_df["Analysis"] = "Ratio"
+	
+	ratio_df["Value"] = np.where(
+		ratio_df["Variable"].isin(percentage_ratios),
+		ratio_df["Value"].apply(convert_to_percentage),
+		ratio_df["Value"]
+	)
 
 	return ratio_df
 
-def horizontal_analysis(column, first_value):
+def horizontal_calc(column, first_value):
 	column = column/first_value
 	return column
 
-def vertical_analysis(row, total_assets):
-	row = row/total_assets
+def horizontal_analysis(df, statement_mappings):
+	horizontal_df = df.copy().pivot(index='Date', columns='Variable', values='Value')
+	
+	# fixing divide by 0
+	col = horizontal_df.iloc[0]
+	
+	zero_cols = horizontal_df.columns[col==0]
+	non_zero_cols = horizontal_df.columns[col!=0]
+
+	horizontal_df = horizontal_df[non_zero_cols]
+	col = horizontal_df.iloc[0]
+
+	horizontal_df = horizontal_df.apply(horizontal_calc, axis=1, args=[col])
+
+	horizontal_df = horizontal_df.reset_index()
+	
+	horizontal_df = pd.melt(
+		horizontal_df,
+		id_vars="Date",
+		# value_vars=None,
+		var_name="Variable",
+		value_name="Value",
+		# col_level=None,
+		# ignore_index=False
+	)
+
+	horizontal_df = horizontal_df.merge(
+		statement_mappings,
+		how="inner"
+	)
+
+	horizontal_df["Variable"] += "Hor"
+	horizontal_df["Analysis"] = "Horizontal"
+	horizontal_df["Value"] = horizontal_df["Value"].apply(convert_to_percentage)
+
+	return horizontal_df
+
+def vertical_calc(row, base):
+	row = row/base
 	return row
 
-analyses = {
-	"": "Absolute",
-	"Hor": "Horizontal",
-	"Ratio": "Ratio",
-	"Ver": "Vertical"
-}
+def vertical_analysis(df, statement_mappings):
+	vertical_df = df.copy()
+	
+	statement_base = {
+		"Balance Sheet": "TotalAssets",
+		"Cash Flow": "NetCashflow",
+		"Income Statement": "TotalRevenue"
+	}
 
-def format_analysis(analysis):
-	return analyses[analysis]
+	for statement, base in statement_base.items():
+		mask = vertical_df["Statement"] == statement
+		
+		subset = vertical_df[mask]
+		initial_index = subset.index
+
+		subset = subset.pivot(index='Date', columns='Variable', values='Value')
+		
+		subset = (
+			subset
+			.apply(vertical_calc, axis=0, args=[subset[base]])
+		)
+		
+		subset = subset.reset_index()
+
+		subset = pd.melt(
+			subset,
+			id_vars="Date",
+			# value_vars=None,
+			var_name="Variable",
+			value_name="Value",
+			# col_level=None,
+			# ignore_index=False
+		)
+
+		subset = subset.merge(
+			statement_mappings,
+			how="inner"
+		)
+
+		subset["Value"] = subset["Value"].apply(convert_to_percentage)
+		subset.index = initial_index
+		vertical_df[mask] = subset
+
+	vertical_df["Variable"] += "Ver"
+	vertical_df["Analysis"] = "Vertical"
+
+	return vertical_df
+
+ratios = [ 
+	"Return on Assets (ROA/ROTA) (Before Tax)",
+	"Return on Assets (ROA/ROTA) (After Tax)",
+	"Return on Equity (ROE)",
+	"Return on Current Equity (ROCE) (Before Tax)",
+	"Return on Current Equity (After Tax)",
+	
+	"EBITDA Margin",
+	"EBIT Margin / OPM",
+	"EBT Margin",
+	"Net Profit Margin (NPM)",
+	"Asset Turnover Ratio (ATR)",
+
+	"Total Leverage",
+	"Tax Factor",
+	"Interest Factor",
+
+	"Current Asset Turnover Ratio",
+	"Non-Current Asset Turnover Ratio",
+	"PPE Utilisation Ratio / Capital Intensity Ratio",
+	"Equity Turnover Ratio",
+
+	"Working Capital Turnover Ratio",
+	"Inventory Turnover Ratio (ITR)",
+	"Days Inventory",
+	"Debtors Turnover Ratio (DTR)",
+	"Days Debtors/Receivables / Average Collection Period",
+	"Days Cash",
+	"Creditor Turnover Ratio (CTR)",
+	"Days Creditors/Payables / Average Payment Period",
+	"Cash Conversion Cycle (Days)",
+
+	"Debt/Equity Ratio",
+	"Debt Ratio / Debt Capitalisation Ratio",
+	"Equity Ratio / Equity Capitalisation Ratio",
+	"Interest Coverage Ratio",
+	"Total Debt Service Ratio",
+
+	"Dividend Per Share",
+	"Earning Per Share",
+	"Dividend Yeild Ratio",
+	"Dividend Payout Ratio (D/P Ratio)",
+	"Retension Ratio",
+
+	"Current Ratio",
+	"Quick Ratio / Acid Test Ratio",
+
+	"Book Value per Share",
+	"Market Value Per Share (on balance sheet date)",
+	"Price Earning Ratio (P/E)",
+	"Price to Book Value Ratio (P/B)",
+]
+
+percentage_ratios = [
+	ratios[index]
+	for index in [
+		0, 1, 2, 3, 4,
+		5, 6, 7, 8,
+		27, 28,
+		33, 35,
+	]
+]
+
+ratio_groups = {
+	"Overall Performance Ratio": list(range(0, 4+1)),
+	"Profit Margin Ratios": list(range(5, 9+1)),
+	"Two Factor Dupont Analysis": [0],
+	"Three Factor DuPont": [8, 9, 10, 2],
+	"Five Factor Dupont": [11, 12, 6, 9, 10, 2],
+	"Turnover/Efficiency Ratios": [9] + list(range(13, 16+1)),
+	"Working Capital Ratio": list(range(17, 25+1)),
+	"Insolvency Ratio": list(range(26, 30+1)),
+	"Test of Dividend Policy": list(range(31, 35+1)),
+	"Liquidity Ratios": [36, 37],
+	"Valuation Ratios": [38, 39, 32, 40, 41],
+}
 
 def main(tickers, symbol, strings: dict, online: bool):
 	st.header("Financial Statements")
@@ -288,7 +505,7 @@ def main(tickers, symbol, strings: dict, online: bool):
 	frequency = "Annual"
 	arg = frequency[:1].lower()
 
-	df = get_statements_data(tickers, symbol, online, arg)
+	df, regular_variables, ratio_variables = get_data(tickers, symbol, online, arg)
 	
 	dfs_to_download = read_data(tickers, symbol, online, arg)
 	sheet_names = ["Balance Sheet", "Cash Flow", "Income Statement"]
@@ -299,233 +516,72 @@ def main(tickers, symbol, strings: dict, online: bool):
 		st.session_state["selected_analyses"] = st.multiselect(
 			label = "Analyses",
 			#label_visibility = "collapsed",
-			options = sorted(analyses.keys()),
-			format_func = format_analysis
+			options = sorted(df["Analysis"].unique()),
+			# format_func = format_analysis
 		)
 
 	with c2:
 		st.session_state["selected_statements"] = st.multiselect(
 				label = "Statements",
-				options = sorted(df["Statement"].dropna().unique() if any( item in ["", "Hor", "Ver"] for item in st.session_state["selected_analyses"] ) else []),
+				options = (
+					np.sort(df["Statement"].dropna().unique())
+					if any( item in ["Absolute", "Horizontal", "Vertical"]
+					for item in st.session_state["selected_analyses"] )
+					else []
+				),
 				format_func = prettify
 				# label_visibility = "collapsed",
 				#index = statements.index("balance_sheet"),
 		)
 	
-	ratios = [
-		"Return on Assets (ROA/ROTA) (Before Tax)",
-		"Return on Assets (ROA/ROTA) (After Tax)",
-		"Return on Equity (ROE)",
-		"Return on Current Equity (ROCE) (Before Tax)",
-		"Return on Current Equity (After Tax)",
-		
-		"EBITDA Margin",
-		"EBIT Margin / OPM",
-		"EBT Margin",
-		"Net Profit Margin (NPM)",
-		"Asset Turnover Ratio (ATR)",
-
-		"Total Leverage",
-		"Tax Factor",
-		"Interest Factor",
-
-		"Current Asset Turnover Ratio",
-		"Non-Current Asset Turnover Ratio",
-		"PPE Utilisation Ratio / Capital Intensity Ratio",
-		"Equity Turnover Ratio",
-
-		"Working Capital Turnover Ratio",
-		"Inventory Turnover Ratio (ITR)",
-		"Days Inventory",
-		"Debtors Turnover Ratio (DTR)",
-		"Days Debtors/Receivables / Average Collection Period",
-		"Days Cash",
-		"Creditor Turnover Ratio (CTR)",
-		"Days Creditors/Payables / Average Payment Period",
-		"Cash Conversion Cycle (Days)",
-
-		"Debt/Equity Ratio",
-		"Debt Ratio / Debt Capitalisation Ratio",
-		"Equity Ratio / Equity Capitalisation Ratio",
-		"Interest Coverage Ratio",
-		"Total Debt Service Ratio",
-
-		"Dividend Per Share",
-		"Earning Per Share",
-		"Dividend Yeild Ratio",
-		"Dividend Payout Ratio (D/P Ratio)",
-		"Retension Ratio",
-
-		"Current Ratio",
-		"Quick Ratio / Acid Test Ratio",
-
-		"Book Value per Share",
-		"Market Value Per Share (on balance sheet date)",
-		"Price Earning Ratio (P/E)",
-		"Price to Book Value Ratio (P/B)",
-	]
-
-	percentage_ratios = [
-		ratios[index]
-		for index in [
-			0, 1, 2, 3, 4,
-			5, 6, 7, 8,
-			27, 28,
-			33, 35,
-		]
-	]
-
-	ratio_groups = {
-		"Overall Performance Ratio": list(range(0, 4+1)),
-		"Profit Margin Ratios": list(range(5, 9+1)),
-		"Two Factor Dupont Analysis": [0],
-		"Three Factor DuPont": [8, 9, 10, 2],
-		"Five Factor Dupont": [11, 12, 6, 9, 10, 2],
-		"Turnover/Efficiency Ratios": [9] + list(range(13, 16+1)),
-		"Working Capital Ratio": list(range(17, 25+1)),
-		"Insolvency Ratio": list(range(26, 30+1)),
-		"Test of Dividend Policy": list(range(31, 35+1)),
-		"Liquidity Ratios": [36, 37],
-		"Valuation Ratios": [38, 39, 32, 40, 41],
-	}
-
 	with c3:
 		st.session_state["selected_ratio_groups"] = st.multiselect(
 				label = "Ratio Groups",
-				options = sorted(ratio_groups.keys() if "Ratio" in st.session_state["selected_analyses"] else []),
+				options = sorted(ratio_groups.keys()) if "Ratio" in st.session_state["selected_analyses"] else [],
 				format_func = prettify
 				# label_visibility = "collapsed",
 				#index = statements.index("balance_sheet"),
 		)
-		
+	
 	# if len(st.session_state["selected_statements"]) == 0:
 	# 	st.session_state["selected_statements"] = statements
 	# else:
-	copy = df.copy()
-	ratio_df = copy.pipe(ratio_analysis, ratios, percentage_ratios)
+
+
+	ratio_attributes = []
+
+	for group in st.session_state["selected_ratio_groups"]:
+		for attr in ratio_groups[group]:
+			ratio_attributes.append(ratios[attr])
+	
+	df = df[
+		df["Analysis"].isin(st.session_state["selected_analyses"])
+	]
 	
 	df = df[
 		df["Statement"].isin(
-			[prettify(selected_statement) for selected_statement in st.session_state["selected_statements"]]
+			st.session_state["selected_statements"]+[None, np.nan]
 		)
 	]
 
-	df = df.T.drop(["Statement"]).astype(float)
-	filtered_df = pd.DataFrame(index = df.index)
-
-	if "" in st.session_state["selected_analyses"]:
-		filtered_df = filtered_df.merge(
-			df, # .add_suffix("Absolute")
-			how="inner", left_index=True, right_index=True
-		)
-	
-	zero_cols = []
-	null_cols = []
-	if "Hor" in st.session_state["selected_analyses"]:
-		
-		# fixing divide by 0
-		col = df.iloc[0]
-		
-		zero_cols = df.columns[col==0]
-		non_zero_cols = df.columns[col!=0]
-
-		null_cols = df.columns[np.isnan(col)]
-	
-		# df = df[non_zero_cols]
-		
-		horizontal_df = df[non_zero_cols]
-		col = horizontal_df.iloc[0]
-
-		filtered_df = filtered_df.merge(
-			horizontal_df.apply(horizontal_analysis, axis=1, args=[col]).applymap(convert_to_percentage).add_suffix('Hor'),
-			how="inner", left_index=True, right_index=True
-		)
-	
-	ratio_attributes = []
-	
-	if "Ratio" in st.session_state["selected_analyses"]:		
-		ratio_attributes = []
-
-		for group in st.session_state["selected_ratio_groups"]:
-			for attr in ratio_groups[group]:
-				ratio_attributes.append(ratios[attr])
-		
-		ratio_df = ratio_df[ratio_attributes]
-			
-		filtered_df = filtered_df.merge(
-			ratio_df,
-			how="inner", left_index=True, right_index=True
-		)
-
-	if "Ver" in st.session_state["selected_analyses"]:
-		copy = df.T.merge(copy[["Statement"]], left_index=True, right_index=True)
-
-		if "Balance Sheet" in st.session_state["selected_statements"]:
-			filtered_df = filtered_df.merge(
-				(
-					copy[
-						copy["Statement"] == "Balance Sheet"
-					]
-					.drop(columns="Statement")
-					.T
-					.apply(vertical_analysis, axis=0, args=[df["TotalAssets"]])
-					.applymap(convert_to_percentage)
-					.add_suffix('Ver')
-				),
-				how="inner", left_index=True, right_index=True
-			)
-		if "Income Statement" in st.session_state["selected_statements"]:
-			filtered_df = filtered_df.merge(
-				(
-					copy[
-						copy["Statement"] == "Income Statement"
-					]
-					.drop(columns="Statement")
-					.T
-					.apply(vertical_analysis, axis=0, args=[df["TotalRevenue"]])
-					.applymap(convert_to_percentage)
-					.add_suffix('Ver')
-				),
-				how="inner", left_index=True, right_index=True
-			)
-
-		if "Cash Flow" in st.session_state["selected_statements"]:
-			st.warning("Using net cashflow as base (not taught in lecture)", icon="⚠️")
-			filtered_df = filtered_df.merge(
-				(
-					copy[
-						copy["Statement"] == "Cash Flow"
-					]
-					.drop(columns="Statement")
-					.T
-					.apply(vertical_analysis, axis=0, args=[ df["NetCashflow"] ])
-					.applymap(convert_to_percentage)
-					.add_suffix('Ver')
-				),
-				how="inner", left_index=True, right_index=True
-			)
-		
-	regular_attributes = list(df.columns.values)
-	
 	attributes_options = []			
 	if len(st.session_state["selected_analyses"]) == 0:
 		pass
-	else:
-		if any(
-			item in st.session_state["selected_statements"] for item in ["Balance Sheet", "Cash Flow", "Income Statement"]
+	if "Ratio" in st.session_state["selected_analyses"]:
+		attributes_options += ratio_attributes
+	if any( item in ["Balance Sheet", "Cash Flow", "Income Statement"]
+			for item in st.session_state["selected_statements"]
 		):
-			attributes_options += regular_attributes
-		if "Ratio" in st.session_state["selected_analyses"]:
-			attributes_options += ratio_attributes
-
+		attributes_options += list(regular_variables)
+	
 	c1, c2, c3 = st.columns([2, 2, 1])
-
+	
 	with c1:
 		st.session_state["selected_attributes"] = st.multiselect(
 			label = "Attributes",
-			#label_visibility = "collapsed",
+			#label_visibility = "collapsed"
 			options = sorted(list(set(attributes_options)))
-		)
+		)	
 
 	checkpoints = {
 		"2020-01-29": "Covid UK First Case",
@@ -545,224 +601,210 @@ def main(tickers, symbol, strings: dict, online: bool):
 			"Simplify Graph"
 		)	
 
-	for attr in st.session_state["selected_attributes"]:
-		for col in zero_cols:
-			if attr == col:
-				st.warning(f"First value of {col} is 0")
-				return
-		for col in null_cols:
-			if attr == col:
-				st.warning(f"First value of {col} is missing.")
-				return
-
 	fig = None
 
-	if len(st.session_state["selected_analyses"]) == 0:
-		pass
-	elif len(st.session_state["selected_attributes"]) == 0:
-		pass
-	else:
-		# attributes_to_expand = [
-		# 	attr if attr not in ratios for attr in st.session_state["selected_attributes"]
-		# ]
-		# attributes_to_expand
-		# return
-		# .remove(None)
+	selected_ratios = [
+		att
+		for att in st.session_state["selected_attributes"]
+		if att in ratios
+	]
 
-		# analyses_to_expand = [
-		# 	ana if ana not in ratios else None
-		# 	for ana in st.session_state["selected_analyses"]
-		# ].remove(None)
+	selected_regular_attributes = [
+		att
+		for att in st.session_state["selected_attributes"]
+		if att not in ratios
+	]
+
+	modified_attributes = []
+	if "Absolute" in st.session_state["selected_analyses"]:
+		modified_attributes += [
+			ana
+			for ana in selected_regular_attributes
+		]
+	if "Horizontal" in st.session_state["selected_analyses"]:
+		modified_attributes += [
+			ana + "Hor"
+			for ana in selected_regular_attributes
+		]
+	if "Vertical" in st.session_state["selected_analyses"]:
+		modified_attributes += [
+			ana + "Ver"
+			for ana in selected_regular_attributes
+		]
 		
-		selected_ratios = [
-			att
-			for att in st.session_state["selected_attributes"]
-			if att in ratios
-		]
+	st.session_state["selected_attributes_modified"] = modified_attributes + selected_ratios
 
-		attributes_to_modify = [
-			att
-			for att in st.session_state["selected_attributes"]
-			if att not in ratios
-		]
+	if len(st.session_state["selected_attributes_modified"]) == 0:
+		st.stop()
+		
+	df = df[
+		df["Variable"].isin(st.session_state["selected_attributes_modified"])
+	]
 
-		analyses_to_modify = [
-			att
-			for att in st.session_state["selected_analyses"]
-			if att != "Ratio"
-		]
 
-		modified_attributes = [
-			att + ana
-			for att in attributes_to_modify
-			for ana in analyses_to_modify
-		]
+	# df = df.pivot(index='Date', columns='Variable', values='Value')
+	# df
+	plot_data = df.copy()
+	table_data = df.copy()
 
-		st.session_state["selected_attributes_modified"] = modified_attributes + selected_ratios
+	table_data["Value"] = np.where(
+		table_data["Analysis"] == "Absolute",
+		table_data["Value"].apply(format_num),
+		table_data["Value"]
+	)
+		
+	table_data = table_data.pivot(index='Date', columns='Variable', values='Value')
+	table_data.index = pd.to_datetime(table_data.index).strftime("%Y %b")
+	table_data = table_data.T
 
-		# st.session_state["selected_attributes_modified"]
-		# return
+	plot_data = plot_data.pivot(index='Date', columns='Variable', values='Value')
 
-		filtered_df = filtered_df[st.session_state["selected_attributes_modified"]]
-
-		filtered_df = filtered_df.T.drop_duplicates().T
-		plot_data = filtered_df.copy().astype(str)
-		table_data = filtered_df.copy()
-
-		if len(st.session_state["selected_attributes_modified"]) > 0:
-			fig = px.line(
-				plot_data,
-				y = st.session_state["selected_attributes_modified"],
-				markers = True
-			)
-
-			for checkpoint in st.session_state["selected_checkpoints"]:
-				fig.add_vline(
-					x=checkpoint,
-					line_color = "grey",
-					line_dash="dot"
-				)
-
-			fig.update_layout(
-				margin=dict(t=80, r=0, b=0, l=0),
-				
-				# axes titles
-				xaxis_title = None,
-				yaxis_title = None,
-				
-				hovermode = "x unified",
-				
-				# legend
-				# showlegend = False,
-				legend = dict(
-					title = "",
-					groupclick="toggleitem",
-					orientation = 'h',
-					
-					# positioning
-					x = 0,
-					xanchor = "left",
-					
-					y = 1.1,
-					yanchor = "bottom",
-					
-					font = dict(
-						size = 10
-					),
-					itemsizing = 'constant',
-					
-					# click behavior
-					#itemclick = 'toggleothers',
-					#itemdoubleclick = 'toggle'
-				)
-			)
-			# fig.update_yaxes(rangemode="tozero")
-
-			if st.session_state["simplify_graph"] == True:
-				annotations = []
-
-				for i, d in enumerate(fig.data):
-					trace_values = []
-					for y in d.y:
-						if y == "nan" or y is None:
-							trace_values.append(None)
-						else:
-							trace_values.append(y)
-
-					first_index = pd.Series(trace_values).first_valid_index()
-					last_index = pd.Series(trace_values).last_valid_index()
-					
-					first_value = d.y[first_index]
-					last_value = d.y[last_index]
-
-					first_text = '  ' + d.name + ' ' + format_num(first_value) + '  '
-					last_text = '  ' + format_num(last_value) + ' ' + f"({show_change(first_value, last_value)})"  + '  '
-					
-
-					annotations.append(dict(
-						x = d.x[first_index],
-						y = remove_percentage_sign(first_value),
-						xanchor='right',
-						yanchor='middle',
-						text=first_text, # + ' {}%'.format(d.y[0]),
-						font = dict(
-							color = d.line.color,
-						),
-						showarrow = False,
-						align = "right",
-						# bgcolor = "hsla(0, 100%, 100%, 1)"
-					))
-
-					annotations.append(dict(
-						x = d.x[last_index],
-						y = remove_percentage_sign(last_value),
-						xanchor='left',
-						yanchor='middle',
-						text = last_text, # + ' {}%'.format(d.y[0]),
-						font = dict(
-							color = d.line.color,
-						),
-						showarrow = False,
-						align = "left"
-						# bgcolor = "hsla(0, 100%, 100%, 1)"
-					))
-				
-				hide_all_axis_stuff = dict(
-						showgrid=False,
-						zeroline=True,
-						showline=False,
-						showticklabels=False,
-				)
-
-				fig.update_layout(
-					margin=dict(t=0, r=0, b=0, l=0),
-
-					annotations=annotations,
-					showlegend=False,
-
-					xaxis = hide_all_axis_stuff,
-					yaxis = hide_all_axis_stuff,
-
-					height = 600
-				)
-
-		if len(st.session_state["selected_attributes_modified"]) > 0:
-			st.plotly_chart(
-				fig,
-				use_container_width=True,
-				config = config,
-			)
-
-		table_data.index = pd.to_datetime(table_data.index).strftime("%Y")
-		table_data = (
-			table_data
-			.T
-			.sort_index()
-			.applymap(format_num)
+	if len(st.session_state["selected_attributes_modified"]) > 0:
+		fig = px.line(
+			plot_data,
+			y = st.session_state["selected_attributes_modified"],
+			markers = True
 		)
 
-		with st.expander("Table View"):
-			st.dataframe(
-				table_data,
-				use_container_width=True
+		for checkpoint in st.session_state["selected_checkpoints"]:
+			fig.add_vline(
+				x=checkpoint,
+				line_color = "grey",
+				line_dash="dot"
 			)
 
-		dfs_to_download = list(dfs_to_download)
-		dfs_to_download.append(table_data)
+		fig.update_layout(
+			margin=dict(t=80, r=0, b=0, l=0),
+			
+			# axes titles
+			xaxis_title = None,
+			yaxis_title = None,
+			
+			hovermode = "x unified",
+			
+			# legend
+			# showlegend = False,
+			legend = dict(
+				title = "",
+				groupclick="toggleitem",
+				orientation = 'h',
+				
+				# positioning
+				x = 0,
+				xanchor = "left",
+				
+				y = 1.1,
+				yanchor = "bottom",
+				
+				font = dict(
+					size = 10
+				),
+				itemsizing = 'constant',
+				
+				# click behavior
+				#itemclick = 'toggleothers',
+				#itemdoubleclick = 'toggle'
+			)
+		)
+		# fig.update_yaxes(rangemode="tozero")
 
-		sheet_names.append("Filtered_Data")
+		if st.session_state["simplify_graph"] == True:
+			annotations = []
 
-		if len(st.session_state["selected_attributes_modified"]) > 0:
-			definitions = get_helper()
-			definitions = definitions[
-				definitions.index.isin(st.session_state["selected_attributes"])
-			]
+			for i, d in enumerate(fig.data):
+				trace_values = []
+				for y in d.y:
+					if y == "nan" or y is None:
+						trace_values.append(None)
+					else:
+						trace_values.append(y)
 
-			with st.expander("Legend"):
-				st.dataframe(
-					definitions,
-					use_container_width=True
-				)
+				first_index = pd.Series(trace_values).first_valid_index()
+				last_index = pd.Series(trace_values).last_valid_index()
+				
+				first_value = d.y[first_index]
+				last_value = d.y[last_index]
+
+
+				first_text = '  ' + d.name + ' ' + format_num(first_value) + '  '
+				last_text = '  ' + format_num(last_value) + ' ' + f"({show_change(first_value, last_value)})"  + '  '
+				
+				annotations.append(dict(
+					x = d.x[first_index],
+					y = remove_percentage_sign(first_value),
+					xanchor='right',
+					yanchor='middle',
+					text=first_text, # + ' {}%'.format(d.y[0]),
+					font = dict(
+						color = d.line.color,
+					),
+					showarrow = False,
+					align = "right",
+					# bgcolor = "hsla(0, 100%, 100%, 1)"
+				))
+
+				annotations.append(dict(
+					x = d.x[last_index],
+					y = remove_percentage_sign(last_value),
+					xanchor='left',
+					yanchor='middle',
+					text = last_text, # + ' {}%'.format(d.y[0]),
+					font = dict(
+						color = d.line.color,
+					),
+					showarrow = False,
+					align = "left"
+					# bgcolor = "hsla(0, 100%, 100%, 1)"
+				))
+			
+			hide_all_axis_stuff = dict(
+					showgrid=False,
+					zeroline=True,
+					showline=False,
+					showticklabels=False,
+			)
+
+			fig.update_layout(
+				margin=dict(t=0, r=0, b=0, l=0),
+
+				annotations=annotations,
+				showlegend=False,
+
+				xaxis = hide_all_axis_stuff,
+				yaxis = hide_all_axis_stuff,
+
+				height = 600
+			)
+
+	if len(st.session_state["selected_attributes_modified"]) > 0:
+		st.plotly_chart(
+			fig,
+			use_container_width=True,
+			config = config,
+		)
+
+	with st.expander("Table View"):
+		st.dataframe(
+			table_data,
+			use_container_width=True
+		)
+
+	dfs_to_download = list(dfs_to_download)
+	dfs_to_download.append(table_data)
+
+	sheet_names.append("Filtered_Data")
+
+	if len(st.session_state["selected_attributes_modified"]) > 0:
+		definitions = get_helper()
+		definitions = definitions[
+			definitions.index.isin(st.session_state["selected_attributes"])
+		]
+
+		with st.expander("Legend"):
+			st.dataframe(
+				definitions,
+				use_container_width=True
+			)
 
 	with st.sidebar:
 		st.divider()
