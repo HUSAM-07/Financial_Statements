@@ -10,7 +10,7 @@ def common_styles():
 		</style>
 		"""
 
-	# st.markdown(common_styles, unsafe_allow_html=True)
+	st.markdown(common_styles, unsafe_allow_html=True)
 
 def display_backup_missing():
 	st.error("Local backup not available; check for latest online version", icon="⚠️")
