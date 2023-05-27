@@ -4,13 +4,13 @@ def common_styles():
 	st.set_page_config(layout="wide")
 	common_styles = """
 		<style>
-		/* #MainMenu, */
+		#MainMenu,
 		footer
 		{visibility: hidden; !important}
 		</style>
 		"""
 
-	st.markdown(common_styles, unsafe_allow_html=True)
+	# st.markdown(common_styles, unsafe_allow_html=True)
 
 def display_backup_missing():
 	st.error("Local backup not available; check for latest online version", icon="⚠️")
