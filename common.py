@@ -4,7 +4,7 @@ def common_styles():
 	st.set_page_config(layout="wide")
 	common_styles = """
 		<style>
-		#MainMenu
+		#MainMenu,
 		footer
 		{visibility: hidden; !important}
 		</style>
